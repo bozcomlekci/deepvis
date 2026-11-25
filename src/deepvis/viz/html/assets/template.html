@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__ · deepvis</title>
+__KATEX__
+<style>__CSS__</style>
+</head>
+<body>
+<header class="dv-head">
+  <div class="brand">
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+      <g stroke-width="1.2" opacity="0.9">
+        <line x1="6" y1="8" x2="24" y2="15" stroke="#58C4DD"/><line x1="6" y1="22" x2="24" y2="15" stroke="#FC6255"/>
+        <line x1="6" y1="8" x2="15" y2="4" stroke="#58C4DD" opacity="0.5"/><line x1="6" y1="22" x2="15" y2="26" stroke="#58C4DD" opacity="0.5"/>
+      </g>
+      <circle cx="6" cy="8" r="3.4" fill="#DDDDDD"/><circle cx="6" cy="22" r="3.4" fill="#888888"/>
+      <circle cx="24" cy="15" r="4" fill="#FFFF00"/>
+    </svg>
+    <span class="title" id="dv-title"></span>
+    <span class="chip" id="dv-fw"></span>
+  </div>
+  <nav class="tabs" role="tablist" id="dv-tabs"></nav>
+  <div class="hstats" id="dv-stats"></div>
+  <div class="actions" id="dv-actions"></div>
+</header>
+<main>
+  <section id="stage" aria-label="visualization"></section>
+  <aside id="panel" aria-label="details"></aside>
+</main>
+<script id="dv-payload" type="application/json">__PAYLOAD__</script>
+<script>window.DV_API = __API__;</script>
+<script>__VOL__</script>
+<script>__JS__</script>
+</body>
+</html>

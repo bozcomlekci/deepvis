@@ -1,0 +1,112 @@
+[build-system]
+requires = ["hatchling>=1.26", "hatch-fancy-pypi-readme>=24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "deepvis"
+dynamic = ["version", "readme"]
+description = "See inside any neural network — PyTorch, JAX, Keras, ONNX or a saved file: every layer drawn from its own numbers, unrolled into math, editable, live while it trains, with a 3Blue1Brown aesthetic."
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "bozcomlekci" }]
+keywords = ["neural network", "visualization", "deep learning", "pytorch", "jax", "flax", "keras", "onnx",
+            "interpretability", "manim", "3blue1brown", "attention"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Framework :: Jupyter",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = ["numpy>=1.24"]
+
+[project.urls]
+Homepage = "https://bozcomlekci.github.io/deepvis/"
+Documentation = "https://bozcomlekci.github.io/deepvis/"
+Source = "https://github.com/bozcomlekci/deepvis"
+Issues = "https://github.com/bozcomlekci/deepvis/issues"
+"VS Code extension" = "https://marketplace.visualstudio.com/items?itemName=batuoz.deepvis"
+"Open VSX" = "https://open-vsx.org/extension/batuoz/deepvis"
+
+[project.scripts]
+deepvis = "deepvis.cli:main"
+
+[project.optional-dependencies]
+torch = ["torch>=2.1"]
+jax = ["jax>=0.4.30", "flax>=0.10", "equinox>=0.11"]
+anim = ["manim>=0.18"]
+sympy = ["sympy>=1.12"]
+demo = ["gradio>=5", "transformers", "torchvision"]
+# everything a user might want (graph = torch_geometric, demo = the Gradio app, dev = tests: not in "all")
+all = ["torch>=2.1", "jax>=0.4.30", "flax>=0.10", "equinox>=0.11", "manim>=0.18", "sympy>=1.12",
+       "onnx>=1.16", "onnxruntime>=1.18", "onnxscript", "keras>=3.3", "cairosvg>=2.7", "anywidget>=0.9"]
+dev = ["pytest>=8", "ipython", "ipykernel", "jupyter_client", "optax", "playwright", "torchvision", "transformers", "timm"]
+graph = ["torch_geometric"]
+onnx = ["onnx>=1.16", "onnxruntime>=1.18", "onnxscript"]
+keras = ["keras>=3.3"]
+figures = ["cairosvg>=2.7"]
+widget = ["anywidget>=0.9"]
+
+[tool.hatch.version]
+path = "src/deepvis/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/deepvis"]
+
+[tool.hatch.build.targets.sdist]
+# the package, its tests and examples; the docs site, media and the VS Code extension are published elsewhere
+only-include = ["src", "tests", "examples", "README.md", "LICENSE", "pyproject.toml"]
+exclude = ["examples/out", "**/__pycache__", ".pytest_cache", ".DS_Store"]
+
+# PyPI shows README.md with its pictures and links from the site: relative paths become absolute URLs there; the
+# README in the repository keeps its relative paths.
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '\]\((?:\./)?docs/(images|video/out)/'
+replacement = '](https://bozcomlekci.github.io/deepvis/media/'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '\]\((?:\./)?vscode/README\.md\)'
+replacement = '](https://marketplace.visualstudio.com/items?itemName=batuoz.deepvis)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '\]\((?:\./)?docs/([\w-]+)\.md\)'
+replacement = '](https://bozcomlekci.github.io/deepvis/docs/\1.html)'
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "torch: needs PyTorch",
+    "jax: needs JAX",
+    "anim: renders manim videos (slow)",
+    "browser: drives a real browser via playwright",
+    "zoo: the model zoo (tests/zoo): wrap, trace and export many architectures",
+    "zoo_slow: zoo entries left to the weekly zoo job",
+    "keras: needs Keras 3 (on the backend KERAS_BACKEND names: jax or torch)",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+# style the codebase uses on purpose (long lines, lambdas, short math names, `a; b`), zip() without strict=
+# (lengths match by construction), and reviewed false positives: B023 closures are all called in the same
+# loop iteration, B007/B027/B008 are intentional
+ignore = ["E501", "E731", "E741", "E702", "B905", "B007", "B023", "B027", "B008"]

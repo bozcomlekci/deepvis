@@ -1,0 +1,246 @@
+{
+  "name": "deepvis",
+  "displayName": "deepvis — see your network",
+  "description": "Pick a PyTorch, JAX or Keras model — or one loaded from ONNX, .keras or .safetensors — in your code or notebook and see it beside the code: every layer drawn from its own numbers, the inputs, intermediate tensors, outputs, attention and the math — live while it trains.",
+  "version": "0.3.0",
+  "publisher": "batuoz",
+  "license": "MIT",
+  "homepage": "https://bozcomlekci.github.io/deepvis/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bozcomlekci/deepvis"
+  },
+  "bugs": {
+    "url": "https://github.com/bozcomlekci/deepvis/issues"
+  },
+  "qna": "marketplace",
+  "preview": true,
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#000000",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Visualization",
+    "Machine Learning",
+    "Data Science"
+  ],
+  "keywords": [
+    "neural network",
+    "pytorch",
+    "jax",
+    "keras",
+    "onnx",
+    "safetensors",
+    "jupyter",
+    "visualization",
+    "deep learning",
+    "attention",
+    "interpretability",
+    "machine learning"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:python",
+    "onNotebook:jupyter-notebook"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "deepvis runs your Python code to draw the model, so it needs a trusted workspace."
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "deepvis runs your code with a local Python interpreter."
+    }
+  },
+  "scripts": {
+    "vendor": "node scripts/vendor.js",
+    "vscode:prepublish": "node scripts/vendor.js",
+    "test": "tsc -p jsconfig.json && node test/parse.test.js && node test/runpy.test.js && node test/run.js",
+    "package": "vsce package",
+    "publish:vsce": "vsce publish --packagePath deepvis-$npm_package_version.vsix",
+    "publish:ovsx": "ovsx publish deepvis-$npm_package_version.vsix",
+    "typecheck": "tsc -p jsconfig.json"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "deepvis.visualizeFile",
+        "title": "Visualize this file",
+        "category": "deepvis",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "deepvis.visualizeModel",
+        "title": "Visualize model here…",
+        "category": "deepvis",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "deepvis.visualizeLive",
+        "title": "Visualize a live model…",
+        "category": "deepvis",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "deepvis.visualizeCall",
+        "title": "Visualize this call",
+        "category": "deepvis"
+      },
+      {
+        "command": "deepvis.rerun",
+        "title": "Run again",
+        "category": "deepvis",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "deepvis.compareCheckpoint",
+        "title": "Compare with checkpoint…",
+        "category": "deepvis",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "deepvis.stop",
+        "title": "Stop",
+        "category": "deepvis",
+        "icon": "$(debug-stop)",
+        "enablement": "deepvis.running"
+      },
+      {
+        "command": "deepvis.savePage",
+        "title": "Save page as HTML…",
+        "category": "deepvis",
+        "icon": "$(save)"
+      },
+      {
+        "command": "deepvis.openInBrowser",
+        "title": "Open page in browser",
+        "category": "deepvis",
+        "icon": "$(link-external)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "deepvis.visualizeFile",
+          "when": "editorLangId == python",
+          "group": "navigation@90"
+        },
+        {
+          "command": "deepvis.stop",
+          "when": "activeWebviewPanelId == 'deepvis' && deepvis.running",
+          "group": "navigation@1"
+        },
+        {
+          "command": "deepvis.rerun",
+          "when": "activeWebviewPanelId == 'deepvis'",
+          "group": "navigation@2"
+        },
+        {
+          "command": "deepvis.compareCheckpoint",
+          "when": "activeWebviewPanelId == 'deepvis'",
+          "group": "navigation@3"
+        },
+        {
+          "command": "deepvis.savePage",
+          "when": "activeWebviewPanelId == 'deepvis'",
+          "group": "navigation@3"
+        },
+        {
+          "command": "deepvis.openInBrowser",
+          "when": "activeWebviewPanelId == 'deepvis'",
+          "group": "navigation@4"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "deepvis.visualizeModel",
+          "when": "editorLangId == python",
+          "group": "deepvis@1"
+        },
+        {
+          "command": "deepvis.visualizeFile",
+          "when": "editorLangId == python",
+          "group": "deepvis@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "deepvis.visualizeFile",
+          "when": "editorLangId == python"
+        },
+        {
+          "command": "deepvis.visualizeModel",
+          "when": "editorLangId == python"
+        },
+        {
+          "command": "deepvis.visualizeLive",
+          "when": "notebookType == jupyter-notebook"
+        },
+        {
+          "command": "deepvis.visualizeCall",
+          "when": "false"
+        }
+      ],
+      "notebook/toolbar": [
+        {
+          "command": "deepvis.visualizeLive",
+          "when": "notebookType == jupyter-notebook",
+          "group": "navigation/execute@90"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "deepvis.visualizeModel",
+        "key": "ctrl+alt+v",
+        "mac": "cmd+alt+v",
+        "when": "editorLangId == python && editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "deepvis",
+      "properties": {
+        "deepvis.pythonPath": {
+          "type": "string",
+          "default": "",
+          "scope": "resource",
+          "description": "The Python to run your code with. Empty: the interpreter selected in the Python extension."
+        },
+        "deepvis.refreshOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Re-make the page when the file it came from is saved."
+        },
+        "deepvis.timeoutSeconds": {
+          "type": "number",
+          "default": 300,
+          "minimum": 5,
+          "description": "Stop a run that takes longer than this."
+        },
+        "deepvis.codeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show “Visualize” above dv.visualize(...) calls and lines that create a model."
+        },
+        "deepvis.runInFileDir": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run in the file's folder instead of the workspace folder (like the Python extension's setting of the same idea)."
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/vscode": "1.90.0",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.9.2",
+    "ovsx": "^0.10.12",
+    "typescript": "^5.9.3"
+  }
+}

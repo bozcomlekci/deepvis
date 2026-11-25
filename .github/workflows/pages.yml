@@ -1,0 +1,52 @@
+name: site
+
+# The public site (gallery, docs pages, API reference, pictures) on GitHub Pages: bozcomlekci.github.io/deepvis.
+# The READMEs on PyPI, the VS Code Marketplace and Open VSX load their pictures from it. The videos aren't in git:
+# they are assets of the `media` release, copied into media/ here.
+on:
+  push:
+    branches: [main]
+    paths: ["src/**", "docs/**", "README.md", "examples/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.repository == 'bozcomlekci/deepvis'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[torch,dev]" pdoc markdown torch_geometric
+          python -m playwright install --with-deps chromium
+      - run: python docs/build_gallery.py docs/site
+      - name: Videos from the media release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download media --dir docs/site/media --clobber || echo "::notice::no media release yet"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

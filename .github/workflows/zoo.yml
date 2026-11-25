@@ -1,0 +1,30 @@
+name: zoo
+
+# The whole model zoo (tests/zoo): every architecture wraps, traces to the native output and makes a page.
+# Weekly, and on demand from the Actions tab; the regular CI runs only the fast entries.
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+jobs:
+  zoo:
+    if: github.repository == 'bozcomlekci/deepvis'  # the public repository; the private dev repository runs no jobs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[torch,jax,dev,onnx,keras]"
+      - run: DEEPVIS_ZOO_REPORT=1 pytest -q -m zoo
+        env:
+          KERAS_BACKEND: jax
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compat
+          path: docs/compat.json

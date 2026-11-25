@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.venv/
+
+# generated
+examples/out/
+media/
+!vscode/media/
+demo/huggingface/dist/
+docs/site/
+
+# editors / OS
+.DS_Store
+.idea/
+demo/huggingface/tinyunet_strokes.pt

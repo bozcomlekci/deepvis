@@ -1,0 +1,12 @@
+test/**
+scripts/**
+**/__pycache__/**
+**/*.pyc
+*.vsix
+.vscode/**
+node_modules/**
+package-lock.json
+jsconfig.json
+**/*.map
+**/*.ts
+.gitignore
