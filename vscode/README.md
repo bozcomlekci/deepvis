@@ -1,13 +1,13 @@
 # deepvis for VS Code
 
 See your network beside your code. Point at a PyTorch, JAX or Keras model (or one your code loads from ONNX, `.keras` or `.safetensors`), and its
-interactive [deepvis](https://bozcomlekci.github.io/deepvis/docs/readme.html) page opens in a panel next to the editor. The page shows every layer drawn
+interactive [deepvis](https://batuoz.com/deepvis/docs/readme.html) page opens in a panel next to the editor. The page shows every layer drawn
 from its own numbers, the inputs, the intermediate tensors, the outputs, attention and the math.
 
-![deepvis in VS Code: Visualize, layers explained, the forward pass, 3-D tensors, neurons, weight edits, interventions, equations, drawing an input, live training](https://bozcomlekci.github.io/deepvis/media/deepvis-teaser-small.gif)
+![deepvis in VS Code: Visualize, layers explained, the forward pass, 3-D tensors, neurons, weight edits, interventions, equations, drawing an input, live training](https://batuoz.com/deepvis/media/deepvis-teaser-small.gif)
 
-<sub>A 60-second tour ([full-size MP4](https://bozcomlekci.github.io/deepvis/media/deepvis-teaser.mp4)) · [the gallery](https://bozcomlekci.github.io/deepvis/) · [the tour of
-every feature](https://bozcomlekci.github.io/deepvis/docs/tour.html)</sub>
+<sub>A 60-second tour ([full-size MP4](https://batuoz.com/deepvis/media/deepvis-teaser.mp4)) · [the gallery](https://batuoz.com/deepvis/) · [the tour of
+every feature](https://batuoz.com/deepvis/docs/tour.html)</sub>
 
 ## Three ways in
 

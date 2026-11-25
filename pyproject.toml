@@ -31,8 +31,8 @@ classifiers = [
 dependencies = ["numpy>=1.24"]
 
 [project.urls]
-Homepage = "https://bozcomlekci.github.io/deepvis/"
-Documentation = "https://bozcomlekci.github.io/deepvis/"
+Homepage = "https://batuoz.com/deepvis/"
+Documentation = "https://batuoz.com/deepvis/"
 Source = "https://github.com/bozcomlekci/deepvis"
 Issues = "https://github.com/bozcomlekci/deepvis/issues"
 "VS Code extension" = "https://marketplace.visualstudio.com/items?itemName=batuoz.deepvis"
@@ -78,7 +78,7 @@ path = "README.md"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 pattern = '\]\((?:\./)?docs/(images|video/out)/'
-replacement = '](https://bozcomlekci.github.io/deepvis/media/'
+replacement = '](https://batuoz.com/deepvis/media/'
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 pattern = '\]\((?:\./)?vscode/README\.md\)'
@@ -86,7 +86,7 @@ replacement = '](https://marketplace.visualstudio.com/items?itemName=batuoz.deep
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 pattern = '\]\((?:\./)?docs/([\w-]+)\.md\)'
-replacement = '](https://bozcomlekci.github.io/deepvis/docs/\1.html)'
+replacement = '](https://batuoz.com/deepvis/docs/\1.html)'
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

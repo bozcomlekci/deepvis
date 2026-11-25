@@ -7,9 +7,9 @@ then **focus** on any part of it, **monitor** intermediate layers, **unroll** it
 interactive dashboard with 2-D and volumetric 3-D views, and [manim](https://github.com/ManimCommunity/manim) videos.
 Every color comes from manim's own palette.
 
-![deepvis in VS Code: Visualize, layers explained, the forward pass, 3-D tensors, neurons, weight edits, interventions, equations, drawing an input, live training](https://bozcomlekci.github.io/deepvis/media/deepvis-teaser.gif)
+![deepvis in VS Code: Visualize, layers explained, the forward pass, 3-D tensors, neurons, weight edits, interventions, equations, drawing an input, live training](https://batuoz.com/deepvis/media/deepvis-teaser.gif)
 
-<sub>The 60-second tour inside VS Code ([MP4](https://bozcomlekci.github.io/deepvis/media/deepvis-teaser.mp4)); a slower walkthrough: [the VS Code introduction](https://bozcomlekci.github.io/deepvis/media/deepvis-vscode-intro.mp4).</sub>
+<sub>The 60-second tour inside VS Code ([MP4](https://batuoz.com/deepvis/media/deepvis-teaser.mp4)); a slower walkthrough: [the VS Code introduction](https://batuoz.com/deepvis/media/deepvis-vscode-intro.mp4).</sub>
 
 ![ResNet-18's tensors as 3-D volumes, each face painted with real activations](docs/images/volumes-resnet.png)
 

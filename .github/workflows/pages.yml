@@ -1,6 +1,6 @@
 name: site
 
-# The public site (gallery, docs pages, API reference, pictures) on GitHub Pages: bozcomlekci.github.io/deepvis.
+# The public site (gallery, docs pages, API reference, pictures) on GitHub Pages: batuoz.com/deepvis.
 # The READMEs on PyPI, the VS Code Marketplace and Open VSX load their pictures from it. The videos aren't in git:
 # they are assets of the `media` release, copied into media/ here.
 on:
