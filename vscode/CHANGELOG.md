@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.3.0
-- First public release, on the VS Code Marketplace and Open VSX (`batuoz.deepvis`).
+- First public release, on the VS Code Marketplace (`batuoz.deepvis`).
 - Pages in the panel work offline: the math typesetting (KaTeX) is bundled, and the panel loads nothing from the
   network.
 - An installed `deepvis` is used only if it is at least as new as the bundled one; an older install is skipped

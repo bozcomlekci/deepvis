@@ -36,7 +36,6 @@ Documentation = "https://batuoz.com/deepvis/"
 Source = "https://github.com/bozcomlekci/deepvis"
 Issues = "https://github.com/bozcomlekci/deepvis/issues"
 "VS Code extension" = "https://marketplace.visualstudio.com/items?itemName=batuoz.deepvis"
-"Open VSX" = "https://open-vsx.org/extension/batuoz/deepvis"
 
 [project.scripts]
 deepvis = "deepvis.cli:main"

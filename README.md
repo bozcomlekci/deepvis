@@ -133,7 +133,8 @@ Notes:
 
 ## In VS Code
 
-The [deepvis extension](vscode/README.md) — **deepvis** by *batuoz* on the VS Code Marketplace and Open VSX (`ext install batuoz.deepvis`) — shows the page in a panel beside your code:
+The [deepvis extension](vscode/README.md) — **deepvis** by *batuoz* on the VS Code Marketplace
+(`ext install batuoz.deepvis`) — shows the page in a panel beside your code:
 
 * **Visualize** above any `dv.visualize(model, x)` call.
 * **Visualize net…** above a line that makes a model. It asks for the inputs.

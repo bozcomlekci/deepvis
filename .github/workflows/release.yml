@@ -1,9 +1,10 @@
 name: release
 
 # Tag v<version> (src/deepvis/__init__.py)        → the Python package on PyPI (trusted publishing)
-# Tag vscode-v<version> (vscode/package.json)     → the extension on the VS Code Marketplace and Open VSX
+# Tag vscode-v<version> (vscode/package.json)     → the extension on the VS Code Marketplace (and Open VSX, once
+#                                                   an OVSX_PAT secret exists)
 # Either way the packages are attached to a GitHub release. workflow_dispatch builds both and, for the Python
-# package, publishes to TestPyPI: a dry run. One-time setup: RELEASING.md.
+# package, publishes to TestPyPI: a dry run. PyPI and the Marketplace trust this workflow (trusted publishing).
 on:
   push:
     tags: ["v*", "vscode-v*"]
@@ -14,7 +15,10 @@ permissions:
 
 jobs:
   python:
-    if: github.repository == 'bozcomlekci/deepvis' && (startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
+    # v<version> tags; vscode-v<version> tags start with "v" too, and belong to the vscode job only
+    if: >-
+      github.repository == 'bozcomlekci/deepvis' && (github.event_name == 'workflow_dispatch' ||
+      (startsWith(github.ref, 'refs/tags/v') && !startsWith(github.ref, 'refs/tags/vscode-v')))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +26,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: The tag matches the version
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.event_name == 'push'
         run: |
           v=$(python -c "import re;print(re.search(r'__version__ = \"(.+?)\"', open('src/deepvis/__init__.py').read())[1])")
           test "v$v" = "$GITHUB_REF_NAME" || { echo "::error::tag $GITHUB_REF_NAME but __version__ is $v"; exit 1; }
