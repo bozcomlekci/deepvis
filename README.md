@@ -128,8 +128,8 @@ Notes:
 * **Dashboard math** is typeset by KaTeX, loaded from a CDN (offline, the TeX source shows instead). For pages
   that never touch the network, pass `offline=True` (or set `DEEPVIS_OFFLINE=1`): the bundled KaTeX is inlined,
   about 0.7 MB more per page. The VS Code extension always does this.
-* Tested with torch 2.14, jax 0.11.1, flax 0.12.9, equinox 0.13.8, manim 0.21. (flax 0.12.9's NNX
-  does not import with jax 0.11.2, so pin `jax==0.11.1` if you use NNX.)
+* Tested with torch 2.14, jax 0.11.1 and 0.12.1, flax 0.12.9 and 0.12.12, equinox 0.13.8, manim 0.21.
+  (flax 0.12.9's NNX does not import with jax 0.11.2, so pin `jax==0.11.1` if you use NNX with that flax.)
 
 ## In VS Code
 
@@ -173,11 +173,12 @@ multiplied (3x7 and 5x8)
 Covered: the class instead of an instance, `None` / dict / empty inputs, wrong feature counts, channels, dimensions,
 dtypes, token ids beyond the vocabulary, missing forward arguments, flax variables and JAX shape mismatches,
 misspelled options and views (with *did you mean*), unwritable paths, busy ports, unknown model names in the CLI,
-denoisers with the wrong signature, and — in the demo — syntax errors, missing packages, timeouts and out-of-memory
-kills, pinned to the snippet's line. Harmless mismatches just work: numpy arrays and plain lists become tensors,
-inputs move to the model's device, missing output folders are created. Requests that can't apply (e.g.
-`start="attention"` for a model without attention, labels of the wrong length) raise a `DeepvisWarning` and the page
-is still made. All errors subclass `deepvis.DeepvisError` and the matching built-in (`ValueError`, `TypeError`, …).
+denoisers with the wrong signature, and — for scripts run from the VS Code extension — syntax errors, missing
+packages, timeouts and out-of-memory kills, pinned to the failing line. Harmless mismatches just work: numpy arrays
+and plain lists become tensors, inputs move to the model's device, missing output folders are created. Requests that
+can't apply (e.g. `start="attention"` for a model without attention, labels of the wrong length) raise a
+`DeepvisWarning` and the page is still made. All errors subclass `deepvis.DeepvisError` and the matching built-in
+(`ValueError`, `TypeError`, …).
 
 ## Examples
 
@@ -190,7 +191,7 @@ page (15), a diffusion model inside and out (16), and a Flax CNN trained from it
 
 **Gallery:** `python docs/build_gallery.py` builds one page per showcase (MLP, attribution, attention, LSTM, mixture
 of experts, graph network, before/after, training replay, diffusion, ViT), with thumbnails, an index and the
-API reference, into `docs/site/`. The `gallery` workflow publishes it to GitHub Pages.
+API reference, into `docs/site/`. The `site` workflow publishes it at https://batuoz.com/deepvis/.
 
 ## Design
 
@@ -272,6 +273,3 @@ KERAS_BACKEND=torch pytest -m keras    # Keras tests run on the backend KERAS_BA
 
 * [3b1b/manim](https://github.com/3b1b/manim) — the visual language deepvis follows: the exact manim palette
   (`deepvis.theme`), the neural-network conventions of the 3Blue1Brown series, and the animations (ManimCE).
-* [ChenLiu-1996/figures4papers](https://github.com/ChenLiu-1996/figures4papers) — a reference for
-  publication-quality figures (Helvetica, minimal spines, a semantic blue / green / red / neutral palette,
-  300-dpi vector export). Not adopted yet; noted for a future print-ready export style.

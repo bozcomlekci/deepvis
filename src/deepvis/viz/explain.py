@@ -388,21 +388,6 @@ def _preds(g: "ModelGraph") -> dict:
     return _PREDS[key]
 
 
-def _reaches(g: "ModelGraph", src: str, dst: str, limit: int = 400) -> bool:
-    """Whether ``dst`` depends on ``src`` (walking predecessors from ``dst``)."""
-    preds = _preds(g)
-    stack, seen = [dst], set()
-    while stack and len(seen) < limit:
-        n = stack.pop()
-        if n == src:
-            return True
-        if n in seen:
-            continue
-        seen.add(n)
-        stack.extend(preds.get(n, ()))
-    return False
-
-
 def _ancestors(g: "ModelGraph", nid: str, limit: int = 80) -> set:
     preds, out, stack = _preds(g), set(), [nid]
     while stack and len(out) < limit:

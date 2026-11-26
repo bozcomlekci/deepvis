@@ -83,7 +83,7 @@ def export_html(model, inputs, path: str, params=None, wrap_kw: dict | None = No
     return net.export_html(path, *args, **kw)
 
 
-CAPTURE_ENV = "DEEPVIS_CAPTURE"  # when set, visualize() writes its page to this file (demo app, VS Code extension)
+CAPTURE_ENV = "DEEPVIS_CAPTURE"  # when set, visualize() writes its page to this file (the VS Code extension)
 CAPTURE_LINES_ENV = "DEEPVIS_CAPTURE_LINES"  # "FILE:FIRST-LAST": only the call written on those lines is captured
 CAPTURE_STOP_ENV = "DEEPVIS_CAPTURE_STOP"  # stop the script once the page is written
 CAPTURE_OPTIONS_ENV = "DEEPVIS_CAPTURE_OPTIONS"  # JSON options added to the captured call (e.g. {"compare": "ckpt.pt"})
@@ -117,7 +117,7 @@ def visualize(model, inputs, params=None, *, path: str | None = None, open_brows
     options  anything :meth:`Net.export_html` takes — ``title``, ``start`` (the tab to open), ``views``,
              ``tokenizer``, ``labels``, ``diffusion``, ``grads``, ``loss_fn``, ``sample``, ``depth`` …
 
-    The page goes to the file named by ``$DEEPVIS_CAPTURE`` (the demo app, the VS Code extension), else to ``path``, else inline
+    The page goes to the file named by ``$DEEPVIS_CAPTURE`` (the VS Code extension), else to ``path``, else inline
     in Jupyter, else your browser. Returns the wrapped :class:`Net` (``net.page`` is the file written, if any), so
     you can keep going: ``net.equation()``, ``net.trace(x)``, ``net["fc1"].prune(0.5)`` …
 

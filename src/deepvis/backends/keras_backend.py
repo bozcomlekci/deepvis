@@ -85,11 +85,6 @@ def _replace_first(obj, new):
     return go(obj)
 
 
-def is_keras(model: Any) -> bool:
-    return any(c.__module__.startswith(("keras.", "tf_keras.")) and c.__name__ in ("Layer", "Model")
-               for c in type(model).__mro__)
-
-
 def _is_graph_model(layer) -> bool:
     return any(c.__name__ in ("Functional", "Sequential") and c.__module__.startswith("keras.")
                for c in type(layer).__mro__)

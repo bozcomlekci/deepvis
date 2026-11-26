@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from ..core.graph import ModelGraph, Node
-from ..core.kinds import ACTIVATION_KINDS, CONV_KINDS, NORM_KINDS
+from ..core.kinds import CONV_KINDS, NORM_KINDS
 from .expr import Add, Apply, Expr, Frac, Postfix, Prod, Raw, Sym, paint, sub, sup, tex_escape
 
 RULES: dict[str, Callable] = {}
@@ -434,9 +434,3 @@ def definition_for(node: Node) -> tuple[str, str] | None:
     if node.kind in CONV_KINDS:
         return DEFINITIONS["Conv"]
     return DEFINITIONS.get(node.kind)
-
-
-def is_elementwise_free(node: Node) -> bool:
-    """Parameterless op that doesn't need its own line."""
-    return not node.params and node.op == "function" or (node.kind in ACTIVATION_KINDS | {"Dropout", "Identity"}
-                                                          and not node.params)

@@ -905,7 +905,3 @@ class OnnxBackend(Backend):
 
     def clone(self) -> "OnnxBackend":
         return OnnxBackend(self.export(), self.name, self._sample)
-
-
-def is_onnx(model: Any) -> bool:
-    return type(model).__name__ == "ModelProto" and type(model).__module__.startswith("onnx")

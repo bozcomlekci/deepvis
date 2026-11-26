@@ -2,7 +2,6 @@
 
 import os
 import socket
-import subprocess
 import sys
 import time
 import warnings
@@ -160,23 +159,3 @@ def test_cli_errors(capsys):
     assert e.value.code == 2
     err = capsys.readouterr().err
     assert "no model called 'resnet19'" in err and "did you mean 'resnet18'" in err and "Traceback" not in err
-
-
-@pytest.mark.parametrize("code,phrases", [
-    ("import torch\nmodel = torch.nn.Linear(2, 2\n", ["line 2", "never closed", "^", "→ fix"]),
-    ("import timmy\n", ["'timmy' isn't installed", "pip install timmy"]),
-    ("import torch, deepvis as dv\ndv.visualize(torch.nn.Linear(5, 2), torch.randn(3, 7))\n",
-     ["line 2", "expects 5 features", "dv.visualize(torch.nn.Linear"]),
-    ("import torch\ny = torch.randn(2).foo()\n", ["line 2", "AttributeError", "fix the code on the line shown"]),
-    ("import torch\nmodel = torch.nn.Linear(2, 2)\n", ["made no page", "dv.visualize(model, inputs)"]),
-])
-def test_demo_explains_snippet_failures(tmp_path, code, phrases):
-    demo = os.path.join(ROOT, "demo", "huggingface")
-    if not os.path.isdir(demo):
-        pytest.skip("demo folder not present")
-    proc = subprocess.run([sys.executable, os.path.join(demo, "runner.py"), str(tmp_path / "p.html")], input=code,
-                          encoding="utf-8", capture_output=True, timeout=300, cwd=demo)
-    assert proc.returncode == 1
-    short = proc.stderr.split("--- deepvis ---", 1)[1]
-    for p in phrases:
-        assert p in short, f"{p!r} not in:\n{short}"

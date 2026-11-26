@@ -14,7 +14,13 @@ async function vscodeBin() {
   const mac = "/Applications/Visual Studio Code.app/Contents/MacOS/Code";
   if (process.platform === "darwin" && fs.existsSync(mac)) return mac;
   const { downloadAndUnzipVSCode } = require("@vscode/test-electron");
-  return downloadAndUnzipVSCode("stable");
+  const bin = await downloadAndUnzipVSCode("stable");
+  if (fs.existsSync(bin)) return bin;
+  // VS Code 1.110+ on macOS names its binary after the product (Contents/MacOS/Code), not "Electron"
+  const dir = path.dirname(bin);
+  const named = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => fs.statSync(path.join(dir, f)).isFile()) : [];
+  if (named.length === 1) return path.join(dir, named[0]);
+  throw new Error(`no VS Code binary at ${bin} (found: ${named.join(", ") || "nothing"})`);
 }
 
 async function main() {

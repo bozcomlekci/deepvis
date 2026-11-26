@@ -92,20 +92,41 @@ def _is_drop(v) -> bool:
     return type(v).__name__ == "DropVar"
 
 
+def _inner_eqns(eqn) -> list:
+    """The equations inside a call primitive (jit, custom_jvp_call …)."""
+    for key in ("call_jaxpr", "fun_jaxpr", "jaxpr"):
+        sub = eqn.params.get(key)
+        if sub is not None:
+            return list(getattr(getattr(sub, "jaxpr", sub), "eqns", []))
+    return []
+
+
+def _inner_prims(eqn) -> set[str]:
+    out = set()
+    for e in _inner_eqns(eqn):
+        out.add(e.primitive.name)
+        if e.primitive.name in CALL_PRIMS:
+            out |= _inner_prims(e)
+    return out
+
+
+# what jax.nn.softmax computes: max-subtracted exp over its sum (plus masking and casts)
+SOFTMAX_PRIMS = {"reduce_max", "max", "sub", "exp", "reduce_sum", "div", "broadcast_in_dim", "stop_gradient",
+                 "convert_element_type", "select_n", "squeeze", "expand_dims", "reshape"} | CALL_PRIMS
+
+
 def _call_name(eqn) -> str | None:
     p = eqn.params
     if "name" in p and isinstance(p["name"], str):
         return p["name"]
-    for key in ("call_jaxpr", "fun_jaxpr", "jaxpr"):
-        sub = p.get(key)
-        if sub is None:
-            continue
-        inner = getattr(sub, "jaxpr", sub)
-        eqns = getattr(inner, "eqns", [])
-        for e in eqns:
-            n = _call_name(e) if e.primitive.name in CALL_PRIMS else None
-            if n:
-                return n
+    for e in _inner_eqns(eqn):
+        n = _call_name(e) if e.primitive.name in CALL_PRIMS else None
+        if n:
+            return n
+    # jax ≥ 0.12 wraps jax.nn.softmax in an anonymous custom_jvp_call: recognize it by what it computes
+    prims = _inner_prims(eqn)
+    if {"exp", "reduce_sum", "div"} <= prims <= SOFTMAX_PRIMS:
+        return "softmax"
     return None
 
 

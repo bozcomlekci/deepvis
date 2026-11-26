@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Callable
 
 import jax
 import jax.numpy as jnp
@@ -11,7 +10,7 @@ import numpy as np
 from ...core.graph import ModelGraph, ParamInfo
 from ...core.tensor import first_array
 from ..base import ArrayOps, Backend, InterventionContext, RunResult
-from .interp import ModuleMeta, Program, build_program, evaluate
+from .interp import CALL_PRIMS, ModuleMeta, Program, _call_name, build_program, evaluate
 
 
 class JaxOps(ArrayOps):
@@ -339,7 +338,7 @@ class JaxBackend(Backend):
             e = jaxpr.eqns[i]
             if e.primitive.name == "div" and any(jaxpr.eqns[j].primitive.name == "exp" for j in grp.eqns if j < i):
                 target = e.outvars[0]
-            if e.primitive.name in ("custom_jvp_call", "jit", "pjit") and "softmax" in str(e.params.get("name", "")):
+            if e.primitive.name in CALL_PRIMS and "softmax" in (_call_name(e) or ""):
                 target = e.outvars[0]
         if target is None:
             return None
@@ -414,8 +413,3 @@ def _eval_until(prog: Program, params, arrs, target, ints, ctx):
         if target in env:
             return env[target]
     return None
-
-
-def wrap_callable_meta(fn: Callable) -> str:
-    return getattr(fn, "__name__", None) or getattr(getattr(fn, "fun", None), "__name__", None) or type(fn).__name__
-

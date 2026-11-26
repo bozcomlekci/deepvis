@@ -116,9 +116,6 @@ class Backend(ABC):
         """Gradients by param path: from the framework (torch ``.grad``) or a grads tree shaped like the params."""
         return {}
 
-    def get_params(self) -> dict[str, np.ndarray]:
-        return {p: self.get_param(p) for p in self.param_paths()}
-
     # ---------------------------------------------------------------- graph
     @abstractmethod
     def build_graph(self, *inputs, **kwargs) -> ModelGraph: ...

@@ -138,3 +138,19 @@ def test_nnx_live_sync():
     assert np.allclose(net(x), m(x), atol=1e-6)
     net["fc1"].scale(0.0)
     assert float(jnp.abs(m.fc1.kernel[...]).max()) == 0.0
+
+
+def test_an_anonymous_softmax_call_is_named_softmax():
+    """jax ≥ 0.12 wraps jax.nn.softmax in a custom_jvp_call without a name: it is recognized by what it computes."""
+    from types import SimpleNamespace as NS
+
+    from deepvis.backends.jax.interp import _call_name
+
+    def eq(prim, **params):
+        return NS(primitive=NS(name=prim), params=params)
+
+    softmax = NS(eqns=[eq(p) for p in ("reduce_max", "max", "broadcast_in_dim", "sub", "exp", "reduce_sum", "div")])
+    assert _call_name(eq("custom_jvp_call", call_jaxpr=softmax)) == "softmax"
+    more = NS(eqns=[eq(p) for p in ("exp", "reduce_sum", "div", "dot_general")])  # computes more than a softmax
+    assert _call_name(eq("custom_jvp_call", call_jaxpr=more)) is None
+    assert _call_name(eq("jit", name="relu", jaxpr=softmax)) == "relu"  # a named call keeps its name

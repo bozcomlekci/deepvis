@@ -10,3 +10,4 @@ jsconfig.json
 **/*.map
 **/*.ts
 .gitignore
+.vscode-test/**

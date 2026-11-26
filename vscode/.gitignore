@@ -1,3 +1,4 @@
 python/vendor/
 *.vsix
 node_modules/
+.vscode-test/

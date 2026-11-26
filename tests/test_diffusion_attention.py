@@ -1,11 +1,8 @@
-"""Inside attention, diffusion sampling, the new component symbols, output display rules, the demo runner."""
+"""Inside attention, diffusion sampling, the new component symbols, output display rules."""
 
 import os
-import subprocess
-import sys
 
 import numpy as np
-import pytest
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -148,29 +145,13 @@ def test_output_display_follows_what_the_output_is():
     assert len(out["topk"]) == 10  # a 1000-way classifier: its top k
 
 
-def test_demo_runner_exports_a_page(tmp_path):
-    demo = os.path.join(ROOT, "demo", "huggingface")
-    if not os.path.isdir(demo):
-        pytest.skip("demo folder not present")
-    out = tmp_path / "page.html"
-    with open(os.path.join(demo, "snippets", "01_mlp.py"), encoding="utf-8") as f:
-        code = f.read()
-    proc = subprocess.run([sys.executable, os.path.join(demo, "runner.py"), str(out)], input=code,
-                          encoding="utf-8", capture_output=True, timeout=300, cwd=demo)
-    assert proc.returncode == 0, proc.stderr[-500:]
-    assert out.stat().st_size > 50_000
-    bad = subprocess.run([sys.executable, os.path.join(demo, "runner.py"), str(tmp_path / "x.html")],
-                         input="model = 1", encoding="utf-8", capture_output=True, timeout=120, cwd=demo)
-    assert bad.returncode != 0 and "dv.visualize(model, inputs)" in bad.stderr
-
-
 def test_visualize_is_the_one_call(tmp_path, monkeypatch):
     model, x = nn.Sequential(nn.Linear(4, 8), nn.ReLU(), nn.Linear(8, 2)), torch.randn(3, 4)
     net = dv.visualize(model, x, path=str(tmp_path / "a.html"), title="Mine", start="monitor")
     assert isinstance(net, dv.Net) and net.page == str(tmp_path / "a.html")
     page = open(net.page, encoding="utf-8").read()
     assert '"title":"Mine"' in page and '"start":"monitor"' in page
-    monkeypatch.setenv("DEEPVIS_CAPTURE", str(tmp_path / "b.html"))  # how the demo app captures the page
+    monkeypatch.setenv("DEEPVIS_CAPTURE", str(tmp_path / "b.html"))  # how the VS Code extension captures the page
     net = dv.visualize(model, (x,))
     assert net.page == str(tmp_path / "b.html") and os.path.getsize(net.page) > 50_000
     assert net.equation().text  # and the wrapper keeps working

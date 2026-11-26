@@ -12,7 +12,6 @@ from __future__ import annotations
 import contextlib
 import math
 import operator
-from typing import Any
 
 import numpy as np
 import torch
@@ -1444,12 +1443,3 @@ def _nearest_container(g: ModelGraph, path: str) -> str:
             return cur
         cur = cur.rpartition(".")[0]
     return ""
-
-
-def is_torch_module(obj: Any) -> bool:
-    return isinstance(obj, nn.Module)
-
-
-def make_backend(model, **kw) -> TorchBackend:
-    return TorchBackend(model, **kw)
-

@@ -128,10 +128,6 @@ def _rgb_to_hex(rgb) -> str:
     return f"#{r:02X}{g:02X}{b:02X}"
 
 
-def interpolate_color(c1: str, c2: str, t: float) -> str:
-    return _rgb_to_hex((1 - t) * _hex_to_rgb(c1) + t * _hex_to_rgb(c2))
-
-
 # Diverging (3b1b weight convention): negative -> red, zero -> dark grey, positive -> blue.
 # On the black canvas larger magnitude = brighter, on both arms.
 DIVERGING_STOPS = [RED_A, RED_C, RED_E, GREY_E, BLUE_E, BLUE_C, BLUE_A]
@@ -152,12 +148,6 @@ def colormap(values, stops=DIVERGING_STOPS, vmin=None, vmax=None) -> list[str]:
     f = (pos - i)[..., None]
     out = (1 - f) * rgb[i] + f * rgb[i + 1]
     return [_rgb_to_hex(c) for c in out.reshape(-1, 3)]
-
-
-def weight_color(w: float, wmax: float) -> str:
-    """Single weight -> color on the symmetric diverging map."""
-    m = wmax if wmax > 0 else 1.0
-    return colormap([w], vmin=-m, vmax=m)[0]
 
 
 def as_dict() -> dict:
@@ -182,4 +172,3 @@ def as_dict() -> dict:
                     and "_" in k and k.split("_")[0] in ("BLUE", "TEAL", "GREEN", "YELLOW", "GOLD", "RED",
                                                             "MAROON", "PURPLE", "GREY")},
     }
-

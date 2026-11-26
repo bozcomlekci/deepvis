@@ -11,10 +11,8 @@ dist/
 examples/out/
 media/
 !vscode/media/
-demo/huggingface/dist/
 docs/site/
 
 # editors / OS
 .DS_Store
 .idea/
-demo/huggingface/tinyunet_strokes.pt

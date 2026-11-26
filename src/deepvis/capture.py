@@ -1,5 +1,5 @@
 """Run a Python script and capture the page one of its ``dv.visualize(...)`` calls makes — or visualize any model /
-inputs expressions at a chosen line. Used by the VS Code extension and the demo app.
+inputs expressions at a chosen line. Used by the VS Code extension.
 
     python -m deepvis.capture OUT.html SCRIPT.py                      # the first dv.visualize(...) call
     python -m deepvis.capture OUT.html SCRIPT.py --lines 12-14        # the call written on lines 12-14
@@ -61,11 +61,9 @@ def explain(exc: BaseException, code: str, script: str) -> tuple[str, int | None
                 "  → fix: correct the Python on that line (a missing bracket, colon or quote is the usual cause)."
                 ), exc.lineno
     if isinstance(exc, ModuleNotFoundError):
-        have = os.environ.get("DEEPVIS_AVAILABLE")
-        where = f"this demo (it has {have})" if have else f"this Python ({sys.executable})"
-        fix = (f"use one of those, or run it on your machine: pip install {exc.name}" if have
-               else f"install it: {sys.executable} -m pip install {exc.name} — or pick the interpreter that has it.")
-        return f"the package {exc.name!r} isn't installed in {where}.\n  → fix: {fix}", _script_line(exc, script)
+        fix = f"install it: {sys.executable} -m pip install {exc.name} — or pick the interpreter that has it."
+        return (f"the package {exc.name!r} isn't installed in this Python ({sys.executable}).\n  → fix: {fix}",
+                _script_line(exc, script))
     where = _script_line(exc, script)
     at = f"line {where}: " if where else ""
     code_line = f"\n    {lines[where - 1].strip()}" if where and where <= len(lines) else ""

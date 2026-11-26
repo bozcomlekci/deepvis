@@ -178,11 +178,6 @@ def canonical_order(arr: np.ndarray, node: Node | None, local: str) -> tuple[lis
     return ident, "", ""
 
 
-def canonical(arr: np.ndarray, node: Node | None, local: str) -> tuple[np.ndarray, str, str]:
-    order, rl, cl = canonical_order(arr, node, local)
-    return np.transpose(arr, order), rl, cl
-
-
 def param_payload(arr: np.ndarray, node: Node | None, local: str) -> dict:
     order, rl, cl = canonical_order(np.asarray(arr), node, local)
     a = np.transpose(np.asarray(arr, dtype=np.float64), order)

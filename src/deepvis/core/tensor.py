@@ -177,9 +177,3 @@ def singular_values(a: np.ndarray, k: int = 64) -> list[float]:
     except np.linalg.LinAlgError:
         return []
     return s[:k].tolist()
-
-
-def round_list(a: np.ndarray, digits: int = 5) -> list:
-    a = np.asarray(a, dtype=np.float64)
-    a = np.where(np.isfinite(a), a, 0.0)
-    return np.round(a, digits).tolist()

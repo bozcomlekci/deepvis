@@ -46,8 +46,7 @@ torch = ["torch>=2.1"]
 jax = ["jax>=0.4.30", "flax>=0.10", "equinox>=0.11"]
 anim = ["manim>=0.18"]
 sympy = ["sympy>=1.12"]
-demo = ["gradio>=5", "transformers", "torchvision"]
-# everything a user might want (graph = torch_geometric, demo = the Gradio app, dev = tests: not in "all")
+# everything a user might want (graph = torch_geometric and dev = the tests are not in "all")
 all = ["torch>=2.1", "jax>=0.4.30", "flax>=0.10", "equinox>=0.11", "manim>=0.18", "sympy>=1.12",
        "onnx>=1.16", "onnxruntime>=1.18", "onnxscript", "keras>=3.3", "cairosvg>=2.7", "anywidget>=0.9"]
 dev = ["pytest>=8", "ipython", "ipykernel", "jupyter_client", "optax", "playwright", "torchvision", "transformers", "timm"]
