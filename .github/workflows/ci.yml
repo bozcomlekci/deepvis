@@ -88,7 +88,7 @@ jobs:
           cache: pip
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22  # @vscode/vsce 4 needs Node 22
       - shell: bash
         run: |
           if [ "$RUNNER_OS" != "macOS" ]; then pip install torch --index-url https://download.pytorch.org/whl/cpu; fi
@@ -111,7 +111,7 @@ jobs:
           python-version: "3.12"
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22  # @vscode/vsce 4 needs Node 22
       - name: Python package
         run: |
           pip install build twine

@@ -54,6 +54,9 @@ jobs:
   vscode:
     if: github.repository == 'bozcomlekci/deepvis' && (startsWith(github.ref, 'refs/tags/vscode-v') || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Marketplace trusted publishing: no token stored here
     defaults:
       run:
         working-directory: vscode
@@ -65,7 +68,7 @@ jobs:
           cache: pip
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22  # @vscode/vsce 4 needs Node 22
       - name: The tag matches the version
         if: startsWith(github.ref, 'refs/tags/vscode-v')
         run: |
@@ -84,9 +87,8 @@ jobs:
           name: vsix
           path: vscode/*.vsix
       - name: Publish to the VS Code Marketplace
+        # trusted publishing (OIDC): the batuoz publisher trusts this repository's release.yml
         if: startsWith(github.ref, 'refs/tags/vscode-v')
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: npm run publish:vsce
       - name: Publish to Open VSX
         if: startsWith(github.ref, 'refs/tags/vscode-v')

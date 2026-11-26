@@ -62,7 +62,7 @@
     "vscode:prepublish": "node scripts/vendor.js",
     "test": "tsc -p jsconfig.json && node test/parse.test.js && node test/runpy.test.js && node test/run.js",
     "package": "vsce package",
-    "publish:vsce": "vsce publish --packagePath deepvis-$npm_package_version.vsix",
+    "publish:vsce": "vsce publish --oidc --packagePath deepvis-$npm_package_version.vsix",
     "publish:ovsx": "ovsx publish deepvis-$npm_package_version.vsix",
     "typecheck": "tsc -p jsconfig.json"
   },
@@ -239,7 +239,7 @@
     "@types/node": "^20.19.43",
     "@types/vscode": "1.90.0",
     "@vscode/test-electron": "^2.4.1",
-    "@vscode/vsce": "^3.9.2",
+    "@vscode/vsce": "^4.1.1",
     "ovsx": "^0.10.12",
     "typescript": "^5.9.3"
   }
